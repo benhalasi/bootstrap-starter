@@ -1,0 +1,36 @@
+{
+  "name": "web-template",
+  "version": "1.0.0",
+  "description": "Lightweight HTML5 template preconfiguried with bootstrap, scss, ts, and gulp for automatic compilation and browser-reload",
+  "main": "npm start",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {
+    "bootstrap": "^4.5.0",
+    "jquery": "^3.5.1"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.26.12",
+    "gulp": "^4.0.2",
+    "gulp-sass": "^4.1.0",
+    "gulp-typescript": "^5.0.0",
+    "typescript": "^3.9.7"
+  },
+  "scripts": {
+    "start": "gulp",
+    "build": "gulp build",
+    "watch": "gulp watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/b-o-mbie/web-template.git"
+  },
+  "author": "Halasi Benedek",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/b-o-mbie/web-template/issues"
+  },
+  "homepage": "https://github.com/b-o-mbie/web-template#readme"
+}

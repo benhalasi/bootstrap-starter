@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono&display=swap");
+
+$font-family-sans-serif: "Roboto";
+$font-family-monospace: "Roboto Mono";
+$enable-shadows: true;
+
+
+$theme-colors: (
+  //"my-cool-custom-color": #bb44ff,
+);
+
+
+/*
+ *  you can customize bootstrap before this import.
+ *  take a look at:  "../../../node_modules/bootstrap/scss/_variables.scss"
+*/
+@import "../../../node_modules/bootstrap/scss/bootstrap.scss";
+
+html,
+body {
+  @extend .h-100;
+  margin: 0;
+  overflow: hidden;
+  scroll-behavior: smooth;
+  scroll-snap-align: center center;
+}
