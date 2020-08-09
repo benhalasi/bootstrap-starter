@@ -9,12 +9,19 @@ $theme-colors: (
   //"my-cool-custom-color": #bb44ff,
 );
 
+$sizes: (
+    33: 33%,
+    66: 66%
+);
+
+
 
 /*
  *  you can customize bootstrap before this import.
- *  take a look at:  "../../../node_modules/bootstrap/scss/_variables.scss"
+ *  take a look at:  "node_modules/bootstrap/scss/_variables.scss"
 */
-@import "../../../node_modules/bootstrap/scss/bootstrap.scss";
+//@import "../../node_modules/bootstrap/scss/variables";
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
 
 html,
 body {

@@ -1,0 +1,11 @@
+{
+    "include": [
+        "src/ts/*.ts"
+    ],
+    "compilerOptions": {
+        "target": "ES5",
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true
+    }
+}

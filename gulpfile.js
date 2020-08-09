@@ -1,56 +1,95 @@
-const gulp = require('gulp')
+const gulp = require("gulp");
 const sass = require('gulp-sass')
-const ts = require('gulp-typescript')
+var uglify = require("gulp-uglify");
+const sourcemaps = require("gulp-sourcemaps");
+const browserify = require("browserify");
+const source = require("vinyl-source-stream");
+const buffer = require("vinyl-buffer");
+const tsify = require("tsify");
 
-const src = 'docs/src/'
-const target = 'docs/target/'
+const paths = {
+  pages: ["src/*.html"]
+};
 
 const browserSync = require('browser-sync').create()
 
-gulp.task('sass', () => {
-  return gulp.src(src + 'scss/*.scss')
+gulp.task('html', () =>
+  gulp.src(paths.pages)
+    .pipe(gulp.dest("dist"))
+    .pipe(browserSync.reload({
+      stream: true
+    }))
+)
+
+gulp.task('jquery', () =>
+  gulp.src('node_modules/jquery/dist/jquery.min.js')
+    .pipe(gulp.dest('dist/js'))
+    .pipe(browserSync.reload({
+      stream: true
+    }))
+)
+
+// popper.js is included in bootstrap.bundle(.min.js)
+gulp.task('bootstrap', () =>
+  gulp.src('node_modules/bootstrap/dist/js/bootstrap.bundle.min.js')
+    .pipe(gulp.dest('dist/js'))
+    .pipe(browserSync.reload({
+      stream: true
+    }))
+);
+
+gulp.task('sass', () =>
+  gulp.src('src/scss/main.scss')
     .pipe(sass())
-    .pipe(gulp.dest(target + 'css'))
+    .pipe(gulp.dest('dist/css'))
     .pipe(browserSync.reload({
       stream: true
     }))
-});
+);
 
-gulp.task('ts', () => {
-  return gulp.src(src + 'ts/*.ts')
-    .pipe(ts({
-      'noImplicitAny': true,
-      'target': 'es5'
-    }))
-    .pipe(gulp.dest(target + 'js'))
+gulp.task('ts', () =>
+  browserify({
+    basedir: ".",
+    debug: true,
+    entries: ['src/ts/main.ts'],
+    cache: {},
+    packageCache: {}
+  })
+    .plugin(tsify)
+    .transform("babelify", {
+      presets: ["es2015"],
+      extensions: [".ts"]
+    })
+    .bundle()
+    .pipe(source("bundle.js"))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({ loadMaps: true }))
+    .pipe(uglify())
+    .pipe(sourcemaps.write("./"))
+    .pipe(gulp.dest("dist/js"))
     .pipe(browserSync.reload({
       stream: true
     }))
-});
+)
 
-gulp.task('bootstrap', () => {
-  return gulp.src('node_modules/bootstrap/dist/js/bootstrap.bundle.min.js')
-    .pipe(gulp.dest(target + 'js'))
-});
-
-gulp.task('jquery', () => {
-  return gulp.src('node_modules/jquery/dist/jquery.min.js')
-    .pipe(gulp.dest(target + 'js'))
-});
-
-gulp.task('build', gulp.parallel('bootstrap', 'jquery', 'sass', 'ts'))
+gulp.task('build', gulp.parallel(
+  'html',
+  'bootstrap',
+  'jquery',
+  'sass',
+  'ts'
+))
 
 gulp.task('watch', gulp.series('build', () => {
   browserSync.init({
     server: {
-      baseDir: 'docs'
+      baseDir: 'dist'
     },
   })
 
-  gulp.watch(src + 'scss/*.scss').on('change', gulp.series('sass'))
-  gulp.watch(src + 'ts/*.ts').on('change', gulp.series('ts'))
-  gulp.watch(['docs/*.html']).on('change', browserSync.reload)
-}));
+  gulp.watch('src/scss/*.scss').on('change', gulp.task('sass'))
+  gulp.watch('src/ts/*.ts').on('change', gulp.task('ts'))
+  gulp.watch(['src/*.html']).on('change', gulp.task('html'))
+}))
 
-
-gulp.task('default', gulp.series('watch'))
+gulp.task("default", gulp.series('watch'))
