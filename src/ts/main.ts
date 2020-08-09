@@ -1,8 +1,8 @@
 import { getFlexText } from './flex'
 
 const demonstrate = (elementId: string) => {
-    const element = document.getElementById(elementId)
-    element.innerText = getFlexText()
+    document.getElementById(elementId)
+        .innerHTML = getFlexText()
 }
 
 demonstrate('demo')
