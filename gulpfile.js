@@ -11,11 +11,14 @@ const paths = {
   pages: ["src/*.html"]
 };
 
+const src = "src/"
+const dist = "docs/"
+
 const browserSync = require('browser-sync').create()
 
 gulp.task('html', () =>
   gulp.src(paths.pages)
-    .pipe(gulp.dest("dist"))
+    .pipe(gulp.dest(dist))
     .pipe(browserSync.reload({
       stream: true
     }))
@@ -23,7 +26,7 @@ gulp.task('html', () =>
 
 gulp.task('jquery', () =>
   gulp.src('node_modules/jquery/dist/jquery.min.js')
-    .pipe(gulp.dest('dist/js'))
+    .pipe(gulp.dest(dist + 'js'))
     .pipe(browserSync.reload({
       stream: true
     }))
@@ -32,16 +35,16 @@ gulp.task('jquery', () =>
 // popper.js is included in bootstrap.bundle(.min.js)
 gulp.task('bootstrap', () =>
   gulp.src('node_modules/bootstrap/dist/js/bootstrap.bundle.min.js')
-    .pipe(gulp.dest('dist/js'))
+    .pipe(gulp.dest(dist + 'js'))
     .pipe(browserSync.reload({
       stream: true
     }))
 );
 
 gulp.task('sass', () =>
-  gulp.src('src/scss/main.scss')
+  gulp.src(src + 'scss/main.scss')
     .pipe(sass())
-    .pipe(gulp.dest('dist/css'))
+    .pipe(gulp.dest(dist + 'css'))
     .pipe(browserSync.reload({
       stream: true
     }))
@@ -51,7 +54,7 @@ gulp.task('ts', () =>
   browserify({
     basedir: ".",
     debug: true,
-    entries: ['src/ts/main.ts'],
+    entries: [src + 'ts/main.ts'],
     cache: {},
     packageCache: {}
   })
@@ -66,7 +69,7 @@ gulp.task('ts', () =>
     .pipe(sourcemaps.init({ loadMaps: true }))
     .pipe(uglify())
     .pipe(sourcemaps.write("./"))
-    .pipe(gulp.dest("dist/js"))
+    .pipe(gulp.dest(dist + "js"))
     .pipe(browserSync.reload({
       stream: true
     }))
@@ -83,13 +86,13 @@ gulp.task('build', gulp.parallel(
 gulp.task('watch', gulp.series('build', () => {
   browserSync.init({
     server: {
-      baseDir: 'dist'
+      baseDir: dist
     },
   })
 
-  gulp.watch('src/scss/*.scss').on('change', gulp.task('sass'))
-  gulp.watch('src/ts/*.ts').on('change', gulp.task('ts'))
-  gulp.watch(['src/*.html']).on('change', gulp.task('html'))
+  gulp.watch(src + 'scss/*.scss').on('change', gulp.task('sass'))
+  gulp.watch(src + 'ts/*.ts').on('change', gulp.task('ts'))
+  gulp.watch([src + '*.html']).on('change', gulp.task('html'))
 }))
 
 gulp.task("default", gulp.series('watch'))

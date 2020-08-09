@@ -31,10 +31,10 @@ gulp build
 npm build
 ```
 ## Using Bootstrap
-[index.html](https://github.com/b-o-mbie/bootstrap-starter/blob/master/src/index.html "index.html") is preset with the neccessary libraries both js and css.
-You can use bootstrap ([docs are here](https://getbootstrap.com/docs/4.5/components/alerts/ "components")) out of the box.
+[src/index.html](https://github.com/b-o-mbie/bootstrap-starter/blob/master/src/index.html) is preset with the neccessary libraries both js and css.
+You can use bootstrap ([docs are here](https://getbootstrap.com/docs/4.5/components/alerts/)) out of the box.
 ## Using Css and Js
-[gulp is configured](https://github.com/b-o-mbie/bootstrap-starter/blob/master/gulpfile.js "gulp is configured") to compile every source file from [src](https://github.com/b-o-mbie/bootstrap-starter/tree/master/src "src") to [target](https://github.com/b-o-mbie/bootstrap-starter/tree/master/dist "dist").
+[gulp is configured](https://github.com/b-o-mbie/bootstrap-starter/blob/master/gulpfile.js "gulp is configured") to compile every source file from [/src](https://github.com/b-o-mbie/bootstrap-starter/tree/master/src) to [/docs](https://github.com/b-o-mbie/bootstrap-starter/tree/master/docs).
 You should write your code into *src/scss/main.scss* and *src/ts/main.ts*. Gulp compiles and *index.html* imports them.
 ## Publishing
-You can easily publish your site with [GitHub Pages](https://pages.github.com/ "GitHub Pages"), with the dist folder as root.
+You can easily publish your site with [GitHub Pages](https://pages.github.com/ "GitHub Pages"), with the */docs* folder as root.
