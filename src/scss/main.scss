@@ -2,8 +2,6 @@
 
 $font-family-sans-serif: "Roboto";
 $font-family-monospace: "Roboto Mono";
-$enable-shadows: true;
-
 
 $theme-colors: (
   //"my-cool-custom-color": #bb44ff,
@@ -29,5 +27,4 @@ body {
   margin: 0;
   overflow: hidden;
   scroll-behavior: smooth;
-  scroll-snap-align: center center;
 }

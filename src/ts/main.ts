@@ -1,9 +1,8 @@
-import { sayHello } from "./hello"
-import { } from "bootstrap"
+import { getFlexText } from './flex'
 
-function showHello(divName: string, name: string) {
-    const elt = document.getElementById(divName);
-    elt.innerText = sayHello(name);
+const demonstrate = (elementId: string) => {
+    const element = document.getElementById(elementId)
+    element.innerText = getFlexText()
 }
 
-showHello("greeting", "TypeScript");
+demonstrate('demo')
