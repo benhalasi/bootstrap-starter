@@ -1,28 +1,36 @@
-const gulp = require('gulp');
+const gulp = require('gulp')
 const sass = require('gulp-sass')
-var uglify = require('gulp-uglify');
-const sourcemaps = require('gulp-sourcemaps');
-const browserify = require('browserify');
-const source = require('vinyl-source-stream');
-const buffer = require('vinyl-buffer');
-const tsify = require('tsify');
+var uglify = require('gulp-uglify')
+const sourcemaps = require('gulp-sourcemaps')
+const browserify = require('browserify')
+const source = require('vinyl-source-stream')
+const buffer = require('vinyl-buffer')
+const tsify = require('tsify')
 
-const paths = {
-  pages: ['src/*.html']
-};
+const browserSync = require('browser-sync').create()
+
 
 const src = 'src/'
 const dist = 'docs/'
 
-const browserSync = require('browser-sync').create()
+const staticResourcePaths = [
+  { from: src + '*.html', to: dist }
+]
 
-gulp.task('html', () =>
-  gulp.src(paths.pages)
-    .pipe(gulp.dest(dist))
-    .pipe(browserSync.reload({
-      stream: true
-    }))
+staticResourcePaths.forEach(res =>
+  gulp.task(res.from, () =>
+    gulp.src(res.from)
+      .pipe(gulp.dest(res.to))
+      .pipe(browserSync.reload({
+        stream: true
+      }))
+  )
 )
+
+gulp.task('statics', gulp.parallel(
+  staticResourcePaths.map(res => res.from)
+))
+
 
 gulp.task('jquery', () =>
   gulp.src('node_modules/jquery/dist/jquery.min.js')
@@ -40,7 +48,8 @@ gulp.task('bootstrap', () =>
     .pipe(browserSync.reload({
       stream: true
     }))
-);
+)
+
 
 gulp.task('sass', () =>
   gulp.src(src + 'scss/main.scss')
@@ -49,7 +58,8 @@ gulp.task('sass', () =>
     .pipe(browserSync.reload({
       stream: true
     }))
-);
+)
+
 
 gulp.task('ts', () =>
   browserify({
@@ -76,24 +86,49 @@ gulp.task('ts', () =>
     }))
 )
 
+
+gulp.task('js', () =>
+  gulp.src(src + 'js_libs/*.js')
+    .pipe(buffer())
+    .pipe(sourcemaps.init({ loadMaps: true }))
+    .pipe(uglify())
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest(dist + 'js'))
+    .pipe(browserSync.reload({
+      stream: true
+    }))
+)
+
+
 gulp.task('build', gulp.parallel(
-  'html',
+  'statics',
   'bootstrap',
   'jquery',
   'sass',
-  'ts'
+  'ts',
+  //'js' // uncomment this to compile .js files from src/js_libs
 ))
 
-gulp.task('watch', gulp.series('build', () => {
+
+gulp.task('host', () =>
   browserSync.init({
     server: {
       baseDir: dist
     },
   })
+)
 
+
+gulp.task('watch', gulp.series('build', 'host', () => {
   gulp.watch(src + 'scss/*.scss').on('change', gulp.task('sass'))
   gulp.watch(src + 'ts/*.ts').on('change', gulp.task('ts'))
-  gulp.watch([src + '*.html']).on('change', gulp.task('html'))
+  staticResourcePaths.forEach(res =>
+    gulp.watch(res.from).on('change', gulp.task(res.from))
+  )
+
+  // uncomment this to watch for changes in src/js_libs and compile those when they occure.
+  // gulp.watch(src + 'js_libs/*.js').on('change', gulp.task('js'))
 }))
+
 
 gulp.task('default', gulp.series('watch'))
