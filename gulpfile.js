@@ -110,24 +110,21 @@ gulp.task('build', gulp.parallel(
 ))
 
 
-gulp.task('host', () =>
+gulp.task('watch', gulp.series('build', () => {
   browserSync.init({
     server: {
       baseDir: dist
     },
   })
-)
 
-
-gulp.task('watch', gulp.series('build', 'host', () => {
   gulp.watch(src + 'scss/*.scss').on('change', gulp.task('sass'))
   gulp.watch(src + 'ts/*.ts').on('change', gulp.task('ts'))
-  staticResourcePaths.forEach(res =>
+  staticResourcePaths.forEach(res => {
     gulp.watch(res.from).on('change', gulp.task(res.from))
-  )
+  })
 
   // uncomment this to watch for changes in src/js_libs and compile those when they occure.
-  // gulp.watch(src + 'js_libs/*.js').on('change', gulp.task('js'))
+  // gulp.watch(src + 'js_libs/*.js').on('change', gulp.task('js'))\
 }))
 
 
